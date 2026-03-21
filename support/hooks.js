@@ -1,5 +1,7 @@
 const { Before, After } = require('@cucumber/cucumber');
-const { chromium, firefox, webkit } = require('@playwright/test');
+const { chromium, firefox, webkit, selectors } = require('@playwright/test');
+
+selectors.setTestIdAttribute('data-test');
 const fs = require('fs').promises;
 const path = require('path');
 const LoginPage = require('../pages/LoginPage');
