@@ -10,7 +10,7 @@
     "test:chromium": "cross-env BROWSER=chromium cucumber-js --profile chromium",
     "test:firefox": "cross-env BROWSER=firefox cucumber-js --profile firefox",
     "test:webkit": "cross-env BROWSER=webkit cucumber-js --profile webkit",
-    "test": "concurrently \"npm run test:chromium\" \"npm run test:firefox\" \"npm run test:webkit\"",
+    "test": "concurrently \"npm run test:chromium\" \"npm run test:firefox\" \"npm run test:webkit\"; npm run report",
     "report": "node generate-report.js"
   },
   "keywords": [],

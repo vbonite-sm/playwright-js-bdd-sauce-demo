@@ -3,6 +3,7 @@ Feature: Saucedemo Shopping Flow
   Background:
     Given I open the saucedemo website
 
+  @smoke
   Scenario: Full shopping flow - login, browse, cart, and remove
     When I enter valid credentials
     And I click the login button
