@@ -9,16 +9,28 @@ class LoginPage extends BasePage {
   }
 
   async navigate() {
-    await this.page.goto(baseUrl);
+    try {
+      await this.page.goto(baseUrl);
+    } catch (err) {
+      throw new Error(`LoginPage.navigate failed: ${err.message}`, { cause: err });
+    }
   }
 
   async enterCredentials(username, password) {
-    await this.locators.usernameInput.fill(username);
-    await this.locators.passwordInput.fill(password);
+    try {
+      await this.locators.usernameInput.fill(username);
+      await this.locators.passwordInput.fill(password);
+    } catch (err) {
+      throw new Error(`LoginPage.enterCredentials failed: ${err.message}`, { cause: err });
+    }
   }
 
   async clickLogin() {
-    await this.locators.loginButton.click();
+    try {
+      await this.locators.loginButton.click();
+    } catch (err) {
+      throw new Error(`LoginPage.clickLogin failed: ${err.message}`, { cause: err });
+    }
   }
 }
 
