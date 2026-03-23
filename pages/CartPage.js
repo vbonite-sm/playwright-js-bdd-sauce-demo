@@ -19,15 +19,15 @@ class CartPage extends BasePage {
   }
 
   async isRemoveEnabled() {
-    return await this.locators.removeButton.isEnabled();
+    return await this.waitAndCheckEnabled(this.locators.removeButton);
   }
 
   async isCheckoutEnabled() {
-    return await this.locators.checkoutButton.isEnabled();
+    return await this.waitAndCheckEnabled(this.locators.checkoutButton);
   }
 
   async isContinueShoppingEnabled() {
-    return await this.locators.continueShoppingButton.isEnabled();
+    return await this.waitAndCheckEnabled(this.locators.continueShoppingButton);
   }
 
   async removeItem() {
