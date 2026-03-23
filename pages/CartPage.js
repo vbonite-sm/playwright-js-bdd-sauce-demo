@@ -1,6 +1,8 @@
-class CartPage {
+const BasePage = require('./BasePage');
+
+class CartPage extends BasePage {
   constructor(page) {
-    this.page = page;
+    super(page);
     this.cartItems = page.getByTestId('inventory-item');
     this.removeButton = page.getByRole('button', { name: /remove/i });
     this.checkoutButton = page.getByTestId('checkout');

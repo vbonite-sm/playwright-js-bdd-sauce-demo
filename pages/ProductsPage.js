@@ -1,6 +1,8 @@
-class ProductsPage {
+const BasePage = require('./BasePage');
+
+class ProductsPage extends BasePage {
   constructor(page) {
-    this.page = page;
+    super(page);
     this.inventoryList = page.getByTestId('inventory-list');
     this.cartBadge = page.getByTestId('shopping-cart-badge');
     this.cartLink = page.getByTestId('shopping-cart-link');
@@ -12,20 +14,20 @@ class ProductsPage {
     const products = [];
     for (let i = 0; i < count; i++) {
       const item = items.nth(i);
-      const name = await item.locator('.inventory_item_name').textContent();
-      const price = await item.locator('.inventory_item_price').textContent();
-      products.push({ name: name.trim(), price: price.trim() });
+      const name = await item.getByTestId('inventory-item-name').textContent();
+      const description = await item.getByTestId('inventory-item-desc').textContent();
+      const price = await item.getByTestId('inventory-item-price').textContent();
+      products.push({ name: name.trim(), description: description.trim(), price: price.trim() });
     }
     return products;
   }
 
   async addFirstProductToCart() {
-    // nth(0) = first product in DOM order
     await this.page.locator('[data-test^="add-to-cart"]').nth(0).click();
   }
 
   async getCartQuantity() {
-    // Returns badge text content (e.g. "1") — only call when badge is known to be visible
+    await this.cartBadge.waitFor({ state: 'visible' });
     return this.cartBadge.textContent();
   }
 
