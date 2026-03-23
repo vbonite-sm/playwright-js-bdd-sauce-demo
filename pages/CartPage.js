@@ -10,6 +10,10 @@ class CartPage extends BasePage {
     this.locators = createCartLocators(page);
   }
 
+  /**
+   * Gets the number of items in the cart.
+   * @returns {Promise<number>}
+   */
   async getItemCount() {
     try {
       return await this.locators.cartItems.count();
@@ -18,6 +22,10 @@ class CartPage extends BasePage {
     }
   }
 
+  /**
+   * Gets the details of the first item in the cart.
+   * @returns {Promise<{name: string, description: string}>}
+   */
   async getItemDetails() {
     try {
       const item = this.locators.cartItems.first();
@@ -29,6 +37,10 @@ class CartPage extends BasePage {
     }
   }
 
+  /**
+   * Checks if the remove button is enabled.
+   * @returns {Promise<boolean>}
+   */
   async isRemoveEnabled() {
     try {
       return await this.waitAndCheckEnabled(this.locators.removeButton);
@@ -37,6 +49,10 @@ class CartPage extends BasePage {
     }
   }
 
+  /**
+   * Checks if the checkout button is enabled.
+   * @returns {Promise<boolean>}
+   */
   async isCheckoutEnabled() {
     try {
       return await this.waitAndCheckEnabled(this.locators.checkoutButton);
@@ -45,6 +61,10 @@ class CartPage extends BasePage {
     }
   }
 
+  /**
+   * Checks if the continue shopping button is enabled.
+   * @returns {Promise<boolean>}
+   */
   async isContinueShoppingEnabled() {
     try {
       return await this.waitAndCheckEnabled(this.locators.continueShoppingButton);
@@ -53,6 +73,10 @@ class CartPage extends BasePage {
     }
   }
 
+  /**
+   * Removes the first item from the cart.
+   * @returns {Promise<void>}
+   */
   async removeItem() {
     try {
       await this.locators.removeButton.click();
@@ -61,6 +85,10 @@ class CartPage extends BasePage {
     }
   }
 
+  /**
+   * Gets the cart badge count. Returns 0 when the cart is empty (badge removed from DOM).
+   * @returns {Promise<number>}
+   */
   async getCartBadgeCount() {
     try {
       // When cart is empty, saucedemo removes badge from DOM entirely (not "0")
