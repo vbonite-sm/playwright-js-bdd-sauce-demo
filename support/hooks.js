@@ -4,9 +4,7 @@ const { chromium, firefox, webkit, selectors } = require('@playwright/test');
 selectors.setTestIdAttribute('data-test');
 const fs = require('fs').promises;
 const path = require('path');
-const LoginPage = require('../pages/LoginPage');
-const ProductsPage = require('../pages/ProductsPage');
-const CartPage = require('../pages/CartPage');
+const { createPages } = require('../pages');
 
 const BROWSERS = { chromium, firefox, webkit };
 
@@ -14,12 +12,10 @@ Before(async function (scenario) {
   const browserName = process.env.BROWSER || 'chromium';
   console.log(`\nRunning scenario: "${scenario['pickle']['name']}" on ${browserName}`);
   this._startTime = Date.now();
-  this.browser = await BROWSERS[browserName].launch({ headless: true });
+  this.browser = await BROWSERS[browserName].launch({ headless: process.env.HEADLESS !== 'false' });
   const context = await this.browser.newContext();
   this.page = await context.newPage();
-  this.loginPage = new LoginPage(this.page);
-  this.productsPage = new ProductsPage(this.page);
-  this.cartPage = new CartPage(this.page);
+  Object.assign(this, createPages(this.page));
 });
 
 After(async function (scenario) {
