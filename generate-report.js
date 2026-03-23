@@ -13,10 +13,12 @@ reporter.generate({
 });
 
 const reportPath = 'reports/html/index.html';
-if (process.platform === 'win32') {
-  execFile('cmd', ['/c', 'start', '', reportPath]);
-} else if (process.platform === 'darwin') {
-  execFile('open', [reportPath]);
-} else {
-  execFile('xdg-open', [reportPath]);
+if (!process.env.CI) {
+  if (process.platform === 'win32') {
+    execFile('cmd', ['/c', 'start', '', reportPath]);
+  } else if (process.platform === 'darwin') {
+    execFile('open', [reportPath]);
+  } else {
+    execFile('xdg-open', [reportPath]);
+  }
 }
