@@ -5,7 +5,7 @@ Feature: Saucedemo Shopping Flow
 
   @smoke
   Scenario: Full shopping flow - login, browse, cart, and remove
-    When I enter valid credentials
+    When I login as "standard_user"
     And I click the login button
     Then I should see the products page
 
