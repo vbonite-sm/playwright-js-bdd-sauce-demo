@@ -1,3 +1,5 @@
+const { baseUrl } = require('../test-data/credentials.json');
+
 class LoginPage {
   constructor(page) {
     this.page = page;
@@ -7,7 +9,7 @@ class LoginPage {
   }
 
   async navigate() {
-    await this.page.goto('https://www.saucedemo.com/');
+    await this.page.goto(baseUrl);
   }
 
   async enterCredentials(username, password) {
