@@ -1,6 +1,6 @@
 const common = {
   paths: ['features/**/*.feature'],
-  require: ['support/world.js', 'support/hooks.js', 'step-definitions/**/*.js'],
+  require: ['support/world.js', 'step-definitions/**/*.js'],
 };
 
 module.exports = {
