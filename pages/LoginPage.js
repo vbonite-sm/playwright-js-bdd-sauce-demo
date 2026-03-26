@@ -11,6 +11,10 @@ class LoginPage extends BasePage {
     this.locators = createLoginLocators(page);
   }
 
+  /**
+   * Navigates to the login page.
+   * @returns {Promise<void>}
+   */
   async navigate() {
     try {
       await this.page.goto(baseUrl);
@@ -19,6 +23,12 @@ class LoginPage extends BasePage {
     }
   }
 
+  /**
+   * Fills the username and password fields.
+   * @param {string} username
+   * @param {string} password
+   * @returns {Promise<void>}
+   */
   async enterCredentials(username, password) {
     try {
       await this.locators.usernameInput.fill(username);
@@ -28,6 +38,10 @@ class LoginPage extends BasePage {
     }
   }
 
+  /**
+   * Clicks the login button.
+   * @returns {Promise<void>}
+   */
   async clickLogin() {
     try {
       await this.locators.loginButton.click();

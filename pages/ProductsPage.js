@@ -10,6 +10,10 @@ class ProductsPage extends BasePage {
     this.locators = createProductsLocators(page);
   }
 
+  /**
+   * Returns all products on the inventory page.
+   * @returns {Promise<Array<{name: string, description: string, price: string}>>}
+   */
   async getAllProducts() {
     try {
       const count = await this.locators.inventoryItem.count();
@@ -27,6 +31,10 @@ class ProductsPage extends BasePage {
     }
   }
 
+  /**
+   * Adds the first product to the cart.
+   * @returns {Promise<void>}
+   */
   async addFirstProductToCart() {
     try {
       await this.locators.addToCartButton.nth(0).click();
@@ -35,6 +43,10 @@ class ProductsPage extends BasePage {
     }
   }
 
+  /**
+   * Gets the cart quantity badge text.
+   * @returns {Promise<string>}
+   */
   async getCartQuantity() {
     try {
       await this.locators.cartBadge.waitFor({ state: 'visible' });
@@ -44,6 +56,10 @@ class ProductsPage extends BasePage {
     }
   }
 
+  /**
+   * Navigates to the cart page.
+   * @returns {Promise<void>}
+   */
   async goToCart() {
     try {
       await this.locators.cartLink.click();

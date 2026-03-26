@@ -6,6 +6,12 @@ class BasePage {
     this.page = page;
   }
 
+  /**
+   * Waits for the locator to become visible.
+   * @param {import('@playwright/test').Locator} locator
+   * @param {object} [options]
+   * @returns {Promise<boolean>}
+   */
   async waitAndCheckVisible(locator, options = {}) {
     try {
       await locator.waitFor({ state: 'visible', ...options });
@@ -15,6 +21,12 @@ class BasePage {
     }
   }
 
+  /**
+   * Waits for the locator to become visible and checks if it is enabled.
+   * @param {import('@playwright/test').Locator} locator
+   * @param {object} [options]
+   * @returns {Promise<boolean>}
+   */
   async waitAndCheckEnabled(locator, options = {}) {
     try {
       await locator.waitFor({ state: 'visible', ...options });
@@ -24,6 +36,12 @@ class BasePage {
     }
   }
 
+  /**
+   * Waits for the locator to become hidden.
+   * @param {import('@playwright/test').Locator} locator
+   * @param {object} [options]
+   * @returns {Promise<boolean>}
+   */
   async waitAndCheckHidden(locator, options = {}) {
     try {
       await locator.waitFor({ state: 'hidden', ...options });
