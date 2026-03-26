@@ -1,45 +1,43 @@
 const BasePage = require('./BasePage');
+const { createCartLocators } = require('./locators/CartLocators');
 
 class CartPage extends BasePage {
   constructor(page) {
     super(page);
-    this.cartItems = page.getByTestId('inventory-item');
-    this.removeButton = page.getByRole('button', { name: /remove/i });
-    this.checkoutButton = page.getByTestId('checkout');
-    this.continueButton = page.getByTestId('continue-shopping');
+    this.locators = createCartLocators(page);
   }
 
   async getItemCount() {
-    return this.cartItems.count();
+    return await this.locators.cartItems.count();
   }
 
   async getItemDetails() {
-    const item = this.cartItems.first();
+    const item = this.locators.cartItems.first();
     const name = await item.getByTestId('inventory-item-name').textContent();
     const description = await item.getByTestId('inventory-item-desc').textContent();
     return { name: name.trim(), description: description.trim() };
   }
 
   async isRemoveEnabled() {
-    return this.removeButton.isEnabled();
+    return await this.locators.removeButton.isEnabled();
   }
 
   async isCheckoutEnabled() {
-    return this.checkoutButton.isEnabled();
+    return await this.locators.checkoutButton.isEnabled();
   }
 
   async isContinueShoppingEnabled() {
-    return this.continueButton.isEnabled();
+    return await this.locators.continueShoppingButton.isEnabled();
   }
 
   async removeItem() {
-    await this.removeButton.click();
+    await this.locators.removeButton.click();
   }
 
   async getCartBadgeCount() {
     // When cart is empty, saucedemo removes badge from DOM entirely (not "0")
     // .count() returns 0 when no elements match — no error thrown
-    return this.page.getByTestId('shopping-cart-badge').count();
+    return await this.locators.cartBadge.count();
   }
 }
 
