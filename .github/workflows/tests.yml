@@ -1,0 +1,100 @@
+name: Playwright Cucumber Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: Run Tests (${{ matrix.browser }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox, webkit]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps ${{ matrix.browser }}
+
+      - name: Write credentials
+        run: |
+          node -e "
+          const fs = require('fs');
+          const path = 'test-data/credentials.json';
+          const creds = JSON.parse(fs.readFileSync(path, 'utf8'));
+          creds.username = process.env.SAUCEDEMO_USERNAME;
+          creds.password = process.env.SAUCEDEMO_PASSWORD;
+          fs.writeFileSync(path, JSON.stringify(creds, null, 2));
+          "
+        env:
+          SAUCEDEMO_USERNAME: ${{ secrets.SAUCEDEMO_USERNAME }}
+          SAUCEDEMO_PASSWORD: ${{ secrets.SAUCEDEMO_PASSWORD }}
+
+      - name: Run ${{ matrix.browser }} tests
+        run: npm run test:${{ matrix.browser }}
+
+      - name: Upload screenshots on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: screenshots-${{ matrix.browser }}
+          path: screenshots/
+          if-no-files-found: ignore
+
+      - name: Upload JSON report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cucumber-report-${{ matrix.browser }}
+          path: reports/cucumber-report-${{ matrix.browser }}.json
+
+  report:
+    name: Generate HTML Report
+    runs-on: ubuntu-latest
+    needs: test
+    if: always()
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Download all JSON reports
+        uses: actions/download-artifact@v4
+        with:
+          pattern: cucumber-report-*
+          path: reports/
+          merge-multiple: true
+
+      - name: Generate HTML report
+        run: node generate-report.js
+
+      - name: Upload HTML report
+        uses: actions/upload-artifact@v4
+        with:
+          name: html-report
+          path: reports/html/
