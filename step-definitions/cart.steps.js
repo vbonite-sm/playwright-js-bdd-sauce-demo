@@ -14,11 +14,12 @@ Then('the cart quantity should be {int}', async function (expectedQty) {
 });
 
 Then('the cart should contain {int} item with correct name and description', async function (count) {
+  if (!this.collectedProducts.length) throw new Error('Products were not collected — run the collect products step first');
   const itemCount = await this.cartPage.getItemCount();
   expect(itemCount).toBe(count);
   const details = await this.cartPage.getItemDetails();
   expect(details.name).toBe(this.collectedProducts[0].name);
-  expect(details.description).toBeTruthy();
+  expect(details.description).toBe(this.collectedProducts[0].description);
 });
 
 Then('the Remove button should be enabled', async function () {
