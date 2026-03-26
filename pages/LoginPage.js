@@ -1,12 +1,11 @@
 const BasePage = require('./BasePage');
-const { baseUrl } = require('../test-data/credentials.json');
+const { createLoginLocators } = require('./locators/LoginLocators');
+const { baseUrl } = require('../test-data/config.json');
 
 class LoginPage extends BasePage {
   constructor(page) {
     super(page);
-    this.usernameInput = page.getByTestId('username');
-    this.passwordInput = page.getByTestId('password');
-    this.loginButton = page.getByTestId('login-button');
+    this.locators = createLoginLocators(page);
   }
 
   async navigate() {
@@ -14,12 +13,12 @@ class LoginPage extends BasePage {
   }
 
   async enterCredentials(username, password) {
-    await this.usernameInput.fill(username);
-    await this.passwordInput.fill(password);
+    await this.locators.usernameInput.fill(username);
+    await this.locators.passwordInput.fill(password);
   }
 
   async clickLogin() {
-    await this.loginButton.click();
+    await this.locators.loginButton.click();
   }
 }
 
