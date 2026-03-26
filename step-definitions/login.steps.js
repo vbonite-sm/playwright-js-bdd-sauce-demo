@@ -17,5 +17,5 @@ When('I click the login button', async function () {
 });
 
 Then('I should see the products page', async function () {
-  await expect(this.productsPage.inventoryList).toBeVisible();
+  await expect(this.productsPage.locators.inventoryList).toBeVisible();
 });
