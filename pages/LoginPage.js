@@ -1,8 +1,9 @@
+const BasePage = require('./BasePage');
 const { baseUrl } = require('../test-data/credentials.json');
 
-class LoginPage {
+class LoginPage extends BasePage {
   constructor(page) {
-    this.page = page;
+    super(page);
     this.usernameInput = page.getByTestId('username');
     this.passwordInput = page.getByTestId('password');
     this.loginButton = page.getByTestId('login-button');
