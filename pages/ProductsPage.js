@@ -2,6 +2,9 @@ const BasePage = require('./BasePage');
 const { createProductsLocators } = require('./locators/ProductsLocators');
 
 class ProductsPage extends BasePage {
+  /**
+   * @param {import('@playwright/test').Page} page
+   */
   constructor(page) {
     super(page);
     this.locators = createProductsLocators(page);

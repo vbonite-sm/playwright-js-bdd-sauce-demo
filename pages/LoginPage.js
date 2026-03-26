@@ -3,6 +3,9 @@ const { createLoginLocators } = require('./locators/LoginLocators');
 const { baseUrl } = require('../test-data/config.json');
 
 class LoginPage extends BasePage {
+  /**
+   * @param {import('@playwright/test').Page} page
+   */
   constructor(page) {
     super(page);
     this.locators = createLoginLocators(page);
