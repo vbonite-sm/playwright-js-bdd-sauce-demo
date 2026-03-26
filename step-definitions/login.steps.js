@@ -6,10 +6,6 @@ Given('I open the saucedemo website', async function () {
   await this.loginPage.navigate();
 });
 
-When('I enter valid credentials', async function () {
-  await this.loginPage.enterCredentials(credentials.username, credentials.password);
-});
-
 When('I login as {string}', async function (username) {
   const user = credentials.validUsers.find(u => u.username === username);
   if (!user) throw new Error(`User "${username}" not found in credentials.json validUsers`);
