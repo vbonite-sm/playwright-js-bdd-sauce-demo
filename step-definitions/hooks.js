@@ -1,5 +1,6 @@
 const { Before, After } = require('@cucumber/cucumber');
 const { chromium, firefox, webkit, selectors } = require('@playwright/test');
+const logger = require('../support/logger');
 
 selectors.setTestIdAttribute('data-test');
 const fs = require('fs').promises;
@@ -9,8 +10,8 @@ const { createPages } = require('../pages');
 const BROWSERS = { chromium, firefox, webkit };
 
 Before(async function (scenario) {
+  logger.info(`scenario: ${scenario.pickle.name}`);
   const browserName = process.env.BROWSER || 'chromium';
-  console.log(`\nRunning scenario: "${scenario['pickle']['name']}" on ${browserName}`);
   this._startTime = Date.now();
   this.browser = await BROWSERS[browserName].launch({ headless: process.env.HEADLESS !== 'false' });
   const context = await this.browser.newContext();
@@ -20,9 +21,9 @@ Before(async function (scenario) {
 
 After(async function (scenario) {
   const status = scenario.result.status;
+  logger.info(`scenario: ${scenario.pickle.name} — ${status}`);
   const duration = Date.now() - this._startTime;
   const passed = status === 'PASSED';
-  console.log(`Scenario "${scenario['pickle']['name']}" ${passed ? 'passed' : 'failed'} in ${duration}ms`);
   if (status === 'FAILED') {
     const screenshot = await this.page.screenshot();
     const safeName = scenario['pickle']['name'].replace(/[^a-zA-Z0-9]/g, '_');
