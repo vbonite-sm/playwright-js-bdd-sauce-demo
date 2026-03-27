@@ -7,7 +7,7 @@
     "doc": "docs"
   },
   "scripts": {
-    "clean": "rm -rf reports/ screenshots/",
+    "clean": "node -e \"['reports','screenshots'].forEach(d=>{try{require('fs').rmSync(d,{recursive:true,force:true})}catch{}})\"",
     "test:chromium": "npm run clean && cross-env BROWSER=chromium cucumber-js --profile chromium",
     "test:firefox": "npm run clean && cross-env BROWSER=firefox cucumber-js --profile firefox",
     "test:webkit": "npm run clean && cross-env BROWSER=webkit cucumber-js --profile webkit",
@@ -22,7 +22,7 @@
   "devDependencies": {
     "@cucumber/cucumber": "^10.9.0",
     "@playwright/test": "^1.58.2",
-    "concurrently": "^8.2.2",
+    "concurrently": "^9.2.1",
     "cross-env": "^7.0.3",
     "eslint": "^8.57.0",
     "multiple-cucumber-html-reporter": "^3.10.0",
