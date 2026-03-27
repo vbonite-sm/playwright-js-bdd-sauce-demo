@@ -1,6 +1,7 @@
 const BasePage = require('./BasePage');
 const { createLoginLocators } = require('./locators/LoginLocators');
 const { baseUrl } = require('../test-data/config.json');
+const logger = require('../support/logger');
 
 class LoginPage extends BasePage {
   /**
@@ -17,8 +18,10 @@ class LoginPage extends BasePage {
    */
   async navigate() {
     try {
+      logger.info('LoginPage.navigate: navigating to ' + baseUrl);
       await this.page.goto(baseUrl);
     } catch (err) {
+      logger.error('LoginPage.navigate failed: ' + err.message);
       throw new Error(`LoginPage.navigate failed: ${err.message}`, { cause: err });
     }
   }
@@ -31,9 +34,11 @@ class LoginPage extends BasePage {
    */
   async enterCredentials(username, password) {
     try {
+      logger.info('LoginPage.enterCredentials: entering credentials for ' + username);
       await this.locators.usernameInput.fill(username);
       await this.locators.passwordInput.fill(password);
     } catch (err) {
+      logger.error('LoginPage.enterCredentials failed: ' + err.message);
       throw new Error(`LoginPage.enterCredentials failed: ${err.message}`, { cause: err });
     }
   }
@@ -44,8 +49,10 @@ class LoginPage extends BasePage {
    */
   async clickLogin() {
     try {
+      logger.info('LoginPage.clickLogin: clicking login button');
       await this.locators.loginButton.click();
     } catch (err) {
+      logger.error('LoginPage.clickLogin failed: ' + err.message);
       throw new Error(`LoginPage.clickLogin failed: ${err.message}`, { cause: err });
     }
   }

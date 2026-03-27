@@ -1,5 +1,6 @@
 const BasePage = require('./BasePage');
 const { createProductsLocators } = require('./locators/ProductsLocators');
+const logger = require('../support/logger');
 
 /**
  * @typedef {Object} ProductSummary
@@ -23,6 +24,7 @@ class ProductsPage extends BasePage {
    */
   async getAllProducts() {
     try {
+      logger.info('ProductsPage.getAllProducts: collecting all products');
       const count = await this.locators.inventoryItem.count();
       const products = [];
       for (let i = 0; i < count; i++) {
@@ -32,8 +34,10 @@ class ProductsPage extends BasePage {
         const price = await item.getByTestId('inventory-item-price').textContent();
         products.push({ name: name.trim(), description: description.trim(), price: price.trim() });
       }
+      logger.info('ProductsPage.getAllProducts: collected ' + count + ' products');
       return products;
     } catch (err) {
+      logger.error('ProductsPage.getAllProducts failed: ' + err.message);
       throw new Error(`ProductsPage.getAllProducts failed: ${err.message}`, { cause: err });
     }
   }
@@ -44,8 +48,10 @@ class ProductsPage extends BasePage {
    */
   async addFirstProductToCart() {
     try {
+      logger.info('ProductsPage.addFirstProductToCart: adding first product to cart');
       await this.locators.addToCartButton.nth(0).click();
     } catch (err) {
+      logger.error('ProductsPage.addFirstProductToCart failed: ' + err.message);
       throw new Error(`ProductsPage.addFirstProductToCart failed: ${err.message}`, { cause: err });
     }
   }
@@ -56,9 +62,11 @@ class ProductsPage extends BasePage {
    */
   async getCartQuantity() {
     try {
+      logger.info('ProductsPage.getCartQuantity: getting cart badge quantity');
       await this.locators.cartBadge.waitFor({ state: 'visible' });
       return this.locators.cartBadge.textContent();
     } catch (err) {
+      logger.error('ProductsPage.getCartQuantity failed: ' + err.message);
       throw new Error(`ProductsPage.getCartQuantity failed: ${err.message}`, { cause: err });
     }
   }
@@ -69,8 +77,10 @@ class ProductsPage extends BasePage {
    */
   async goToCart() {
     try {
+      logger.info('ProductsPage.goToCart: navigating to cart');
       await this.locators.cartLink.click();
     } catch (err) {
+      logger.error('ProductsPage.goToCart failed: ' + err.message);
       throw new Error(`ProductsPage.goToCart failed: ${err.message}`, { cause: err });
     }
   }

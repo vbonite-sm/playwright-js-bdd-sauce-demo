@@ -1,5 +1,6 @@
 const BasePage = require('./BasePage');
 const { createCartLocators } = require('./locators/CartLocators');
+const logger = require('../support/logger');
 
 /**
  * @typedef {Object} CartItemDetails
@@ -22,8 +23,10 @@ class CartPage extends BasePage {
    */
   async getItemCount() {
     try {
+      logger.info('CartPage.getItemCount: counting cart items');
       return await this.locators.cartItems.count();
     } catch (err) {
+      logger.error('CartPage.getItemCount failed: ' + err.message);
       throw new Error(`CartPage.getItemCount failed: ${err.message}`, { cause: err });
     }
   }
@@ -35,11 +38,13 @@ class CartPage extends BasePage {
    */
   async getItemDetails() {
     try {
+      logger.info('CartPage.getItemDetails: reading first cart item details');
       const item = this.locators.cartItems.first();
       const name = await item.getByTestId('inventory-item-name').textContent();
       const description = await item.getByTestId('inventory-item-desc').textContent();
       return { name: name.trim(), description: description.trim() };
     } catch (err) {
+      logger.error('CartPage.getItemDetails failed: ' + err.message);
       throw new Error(`CartPage.getItemDetails failed: ${err.message}`, { cause: err });
     }
   }
@@ -50,8 +55,10 @@ class CartPage extends BasePage {
    */
   async isRemoveEnabled() {
     try {
+      logger.info('CartPage.isRemoveEnabled: checking Remove button state');
       return await this.waitAndCheckEnabled(this.locators.removeButton);
     } catch (err) {
+      logger.error('CartPage.isRemoveEnabled failed: ' + err.message);
       throw new Error(`CartPage.isRemoveEnabled failed: ${err.message}`, { cause: err });
     }
   }
@@ -62,8 +69,10 @@ class CartPage extends BasePage {
    */
   async isCheckoutEnabled() {
     try {
+      logger.info('CartPage.isCheckoutEnabled: checking Checkout button state');
       return await this.waitAndCheckEnabled(this.locators.checkoutButton);
     } catch (err) {
+      logger.error('CartPage.isCheckoutEnabled failed: ' + err.message);
       throw new Error(`CartPage.isCheckoutEnabled failed: ${err.message}`, { cause: err });
     }
   }
@@ -74,8 +83,10 @@ class CartPage extends BasePage {
    */
   async isContinueShoppingEnabled() {
     try {
+      logger.info('CartPage.isContinueShoppingEnabled: checking Continue Shopping button state');
       return await this.waitAndCheckEnabled(this.locators.continueShoppingButton);
     } catch (err) {
+      logger.error('CartPage.isContinueShoppingEnabled failed: ' + err.message);
       throw new Error(`CartPage.isContinueShoppingEnabled failed: ${err.message}`, { cause: err });
     }
   }
@@ -86,8 +97,10 @@ class CartPage extends BasePage {
    */
   async removeItem() {
     try {
+      logger.info('CartPage.removeItem: clicking Remove button');
       await this.locators.removeButton.click();
     } catch (err) {
+      logger.error('CartPage.removeItem failed: ' + err.message);
       throw new Error(`CartPage.removeItem failed: ${err.message}`, { cause: err });
     }
   }
@@ -100,10 +113,12 @@ class CartPage extends BasePage {
    */
   async getCartBadgeCount() {
     try {
+      logger.info('CartPage.getCartBadgeCount: reading cart badge count');
       // When cart is empty, saucedemo removes badge from DOM entirely (not "0")
       // .count() returns 0 when no elements match — no error thrown
       return await this.locators.cartBadge.count();
     } catch (err) {
+      logger.error('CartPage.getCartBadgeCount failed: ' + err.message);
       throw new Error(`CartPage.getCartBadgeCount failed: ${err.message}`, { cause: err });
     }
   }
