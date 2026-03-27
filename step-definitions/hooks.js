@@ -22,14 +22,12 @@ Before(async function (scenario) {
 After(async function (scenario) {
   const status = scenario.result.status;
   logger.info(`scenario: ${scenario.pickle.name} — ${status}`);
-  const duration = Date.now() - this._startTime;
-  const passed = status === 'PASSED';
   if (status === 'FAILED') {
     const screenshot = await this.page.screenshot();
     const safeName = scenario['pickle']['name'].replace(/[^a-zA-Z0-9]/g, '_');
     await fs.mkdir('screenshots', { recursive: true });
     await fs.writeFile(path.join('screenshots', safeName + '_' + Date.now() + '.png'), screenshot);
-    await this.attach(screenshot, 'image/png');
+    this.attach(screenshot, 'image/png');
   }
   await this.browser.close();
 });
