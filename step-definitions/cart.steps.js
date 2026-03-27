@@ -11,6 +11,7 @@ Then('the cart quantity should be {int}', async function (expectedQty) {
     expect(count).toBe(0);
   } else {
     const qty = await this.productsPage.getCartQuantity();
+    if (qty == null) throw new Error('Cart quantity badge not found or returned empty');
     expect(Number.parseInt(qty)).toBe(expectedQty);
   }
 });
