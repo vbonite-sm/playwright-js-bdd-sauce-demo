@@ -9,12 +9,13 @@ on:
 
 jobs:
   test:
-    name: Run Tests (${{ matrix.browser }})
+    name: Run Tests (${{ matrix.browser }} shard ${{ matrix.shard }}/2)
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
         browser: [chromium, firefox, webkit]
+        shard: [1, 2]
 
     steps:
       - name: Checkout
@@ -46,14 +47,23 @@ jobs:
           SAUCEDEMO_USERNAME: ${{ secrets.SAUCEDEMO_USERNAME }}
           SAUCEDEMO_PASSWORD: ${{ secrets.SAUCEDEMO_PASSWORD }}
 
-      - name: Run ${{ matrix.browser }} tests
-        run: npm run test:${{ matrix.browser }}
+      - name: Run ${{ matrix.browser }} tests (shard ${{ matrix.shard }}/2)
+        run: |
+          FILES=$(ls features/*.feature | sort | awk -v s=${{ matrix.shard }} -v t=2 '(NR-1)%t==s-1{print}' | tr '\n' ' ')
+          npx cucumber-js $FILES \
+            --require support/world.js \
+            --require support/hooks.js \
+            --require 'step-definitions/**/*.js' \
+            --format progress-bar \
+            --format "json:reports/cucumber-report-${{ matrix.browser }}-${{ matrix.shard }}.json"
+        env:
+          BROWSER: ${{ matrix.browser }}
 
       - name: Upload screenshots on failure
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: screenshots-${{ matrix.browser }}
+          name: screenshots-${{ matrix.browser }}-shard${{ matrix.shard }}
           path: screenshots/
           if-no-files-found: ignore
 
@@ -61,8 +71,8 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: cucumber-report-${{ matrix.browser }}
-          path: reports/cucumber-report-${{ matrix.browser }}.json
+          name: cucumber-report-${{ matrix.browser }}-${{ matrix.shard }}
+          path: reports/cucumber-report-${{ matrix.browser }}-${{ matrix.shard }}.json
 
   report:
     name: Generate HTML Report

@@ -1,9 +1,15 @@
 const BasePage = require('./BasePage');
 const { createCartLocators } = require('./locators/CartLocators');
 
+/**
+ * @typedef {Object} CartItemDetails
+ * @property {string} name
+ * @property {string} description
+ */
+
 class CartPage extends BasePage {
   /**
-   * @param {import('@playwright/test').Page} page
+   * @param {import('@playwright/test').Page} page - Playwright page instance scoped to the current browser context
    */
   constructor(page) {
     super(page);
@@ -11,8 +17,8 @@ class CartPage extends BasePage {
   }
 
   /**
-   * Gets the number of items in the cart.
-   * @returns {Promise<number>}
+   * Returns the number of `[data-test="inventory-item"]` elements present in the cart list.
+   * @returns {Promise<number>} Count of cart line items; 0 if the cart is empty
    */
   async getItemCount() {
     try {
@@ -23,8 +29,9 @@ class CartPage extends BasePage {
   }
 
   /**
-   * Gets the details of the first item in the cart.
-   * @returns {Promise<{name: string, description: string}>}
+   * Reads the name and description of the first `[data-test="inventory-item"]` in the cart.
+   * Both values are trimmed of surrounding whitespace.
+    * @returns {Promise<CartItemDetails>} Display name and short description of the first cart item
    */
   async getItemDetails() {
     try {
@@ -38,8 +45,8 @@ class CartPage extends BasePage {
   }
 
   /**
-   * Checks if the remove button is enabled.
-   * @returns {Promise<boolean>}
+   * Checks whether the Remove button (`role=button, name=/remove/i`) is enabled and interactable.
+   * @returns {Promise<boolean>} `true` if the button is enabled, `false` if disabled
    */
   async isRemoveEnabled() {
     try {
@@ -50,8 +57,8 @@ class CartPage extends BasePage {
   }
 
   /**
-   * Checks if the checkout button is enabled.
-   * @returns {Promise<boolean>}
+   * Checks whether the `[data-test="checkout"]` button is enabled and interactable.
+   * @returns {Promise<boolean>} `true` if the button is enabled, `false` if disabled
    */
   async isCheckoutEnabled() {
     try {
@@ -62,8 +69,8 @@ class CartPage extends BasePage {
   }
 
   /**
-   * Checks if the continue shopping button is enabled.
-   * @returns {Promise<boolean>}
+   * Checks whether the `[data-test="continue-shopping"]` button is enabled and interactable.
+   * @returns {Promise<boolean>} `true` if the button is enabled, `false` if disabled
    */
   async isContinueShoppingEnabled() {
     try {
@@ -74,7 +81,7 @@ class CartPage extends BasePage {
   }
 
   /**
-   * Removes the first item from the cart.
+   * Clicks the Remove button (`role=button, name=/remove/i`) to remove the first cart item.
    * @returns {Promise<void>}
    */
   async removeItem() {
@@ -86,8 +93,10 @@ class CartPage extends BasePage {
   }
 
   /**
-   * Gets the cart badge count. Returns 0 when the cart is empty (badge removed from DOM).
-   * @returns {Promise<number>}
+   * Returns the count of `[data-test="shopping-cart-badge"]` elements in the header.
+   * Saucedemo removes the badge from the DOM entirely when the cart is empty rather than
+   * displaying "0", so `.count()` is used instead of `.textContent()` to avoid a locator error.
+   * @returns {Promise<number>} Number shown on the cart badge, or 0 when the cart is empty
    */
   async getCartBadgeCount() {
     try {

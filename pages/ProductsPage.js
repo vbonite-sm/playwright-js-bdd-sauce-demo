@@ -1,6 +1,13 @@
 const BasePage = require('./BasePage');
 const { createProductsLocators } = require('./locators/ProductsLocators');
 
+/**
+ * @typedef {Object} ProductSummary
+ * @property {string} name
+ * @property {string} description
+ * @property {string} price
+ */
+
 class ProductsPage extends BasePage {
   /**
    * @param {import('@playwright/test').Page} page
@@ -12,7 +19,7 @@ class ProductsPage extends BasePage {
 
   /**
    * Returns all products on the inventory page.
-   * @returns {Promise<Array<{name: string, description: string, price: string}>>}
+    * @returns {Promise<ProductSummary[]>}
    */
   async getAllProducts() {
     try {
@@ -45,7 +52,7 @@ class ProductsPage extends BasePage {
 
   /**
    * Gets the cart quantity badge text.
-   * @returns {Promise<string>}
+    * @returns {Promise<string|null>}
    */
   async getCartQuantity() {
     try {

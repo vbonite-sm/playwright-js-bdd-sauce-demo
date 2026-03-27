@@ -9,7 +9,7 @@ class BasePage {
   /**
    * Waits for the locator to become visible.
    * @param {import('@playwright/test').Locator} locator
-   * @param {object} [options]
+    * @param {import('@playwright/test').LocatorWaitForOptions} [options]
    * @returns {Promise<boolean>}
    */
   async waitAndCheckVisible(locator, options = {}) {
@@ -24,7 +24,7 @@ class BasePage {
   /**
    * Waits for the locator to become visible and checks if it is enabled.
    * @param {import('@playwright/test').Locator} locator
-   * @param {object} [options]
+    * @param {import('@playwright/test').LocatorWaitForOptions} [options]
    * @returns {Promise<boolean>}
    */
   async waitAndCheckEnabled(locator, options = {}) {
@@ -39,7 +39,7 @@ class BasePage {
   /**
    * Waits for the locator to become hidden.
    * @param {import('@playwright/test').Locator} locator
-   * @param {object} [options]
+    * @param {import('@playwright/test').LocatorWaitForOptions} [options]
    * @returns {Promise<boolean>}
    */
   async waitAndCheckHidden(locator, options = {}) {
